@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Herbal&Heaven | Premium Organic Rituals</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Playfair+Display:ital,wght@0,400;0,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary: #2d4a22;
+            --accent: #c5a059;
+            --text-dark: #2c2c2c;
+            --white: #ffffff;
+            --danger: #e74c3c;
+            --font-heading: 'Playfair Display', serif;
+            --font-body: 'Lato', sans-serif;
+            --shadow: 0 10px 30px rgba(0,0,0,0.08);
+            --transition: all 0.3s ease;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: var(--font-body); background-color: #fdfbf7; color: var(--text-dark); line-height: 1.6; }
+        
+        /* Sales Timer Banner */
+        .timer-banner { background: var(--primary); color: var(--white); text-align: center; padding: 8px; font-size: 13px; letter-spacing: 1px; }
+        #timer { font-weight: 700; color: var(--accent); }
+
+        /* Header & Logo */
+        header {
+            position: sticky; top: 0; z-index: 1000;
+            background: rgba(253, 251, 247, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            padding: 10px 20px;
+        }
+        .nav-wrapper { display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto; }
+        .logo-container { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+        .brand-logo-img { width: 50px; height: 50px; border-radius: 50%; object-fit: contain; }
+        .logo-text { font-family: var(--font-heading); font-size: 24px; font-weight: 700; color: var(--primary); }
+
+        /* Products Grid */
+        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+        .products-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; margin-top: 20px; }
+        .product-card { background: white; border-radius: 8px; overflow: hidden; box-shadow: var(--shadow); border: 1px solid #f0f0f0; transition: var(--transition); text-align: center; padding-bottom: 20px; position: relative; }
+        .product-card:hover { transform: translateY(-5px); }
+        
+        /* Inventory Alerts */
+        .stock-alert { position: absolute; bottom: 85px; left: 0; right: 0; background: rgba(231, 76, 60, 0.9); color: white; font-size: 10px; padding: 2px 0; font-weight: 700; z-index: 3; }
+        .sold-out { opacity: 0.6; filter: grayscale(1); pointer-events: none; }
+
+        .img-wrap { height: 250px; position: relative; overflow: hidden; }
+        .img-wrap img { width: 100%; height: 100%; object-fit: cover; }
+        .skin-tag { position: absolute; top: 10px; right: 10px; background: white; padding: 3px 8px; font-size: 10px; font-weight: 700; border-radius: 4px; z-index: 2; }
+        
+        /* Buttons */
+        .btn { padding: 10px 20px; border-radius: 50px; border: none; cursor: pointer; font-weight: 700; text-transform: uppercase; font-size: 11px; transition: var(--transition); }
+        .btn-primary { background: var(--primary); color: white; width: 80%; }
+        .btn-primary:disabled { background: #ccc; cursor: not-allowed; }
+        .btn-repeat { background: var(--accent); color: white; padding: 4px 10px; font-size: 9px; margin-top: 5px; }
+
+        /* Cart Drawer */
+        .drawer { position: fixed; top: 0; right: -400px; width: 380px; height: 100%; background: white; z-index: 2000; transition: 0.4s; padding: 25px; box-shadow: -10px 0 30px rgba(0,0,0,0.1); display: flex; flex-direction: column; }
+        .drawer.active { right: 0; }
+        .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: none; z-index: 1500; }
+        .overlay.active { display: block; }
+
+        /* Checkout Modal */
+        .modal { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 95%; max-width: 450px; background: white; z-index: 3000; padding: 25px; border-radius: 12px; display: none; box-shadow: 0 20px 50px rgba(0,0,0,0.2); }
+        .modal.active { display: block; }
+        
+        /* Order History */
+        .history-box { margin-top: 20px; padding-top: 15px; border-top: 2px dashed #eee; flex-grow: 1; overflow-y: auto; }
+        .history-item { font-size: 12px; background: #f9f9f9; padding: 10px; margin-bottom: 8px; border-radius: 4px; border-left: 3px solid var(--accent); display: flex; justify-content: space-between; align-items: center; }
+
+        .wa-float { position: fixed; bottom: 20px; right: 20px; background: #25d366; color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 30px; z-index: 1001; text-decoration: none; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+        input { width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 5px; font-family: var(--font-body); }
+    </style>
+</head>
+<body>
+
+    <div class="timer-banner">EXCLUSIVE OFFER: Buy 4 soaps and get 1 FREE! Ends in: <span id="timer">00:00:00</span></div>
+
+    <header>
+        <div class="nav-wrapper">
+            <a href="#" class="logo-container">
+                <img src="Herbal&Heaven.png" alt="Herbal&Heaven" class="brand-logo-img">
+                <span class="logo-text">Herbal&Heaven</span>
+            </a>
+            <div style="cursor: pointer; position: relative;" onclick="toggleDrawer(true)">
+                <i class="fa-solid fa-shopping-bag" style="font-size: 22px; color: var(--primary);"></i>
+                <span id="cartCount" style="background: var(--danger); color: white; border-radius: 50%; padding: 2px 6px; font-size: 10px; position: absolute; top: -8px; right: -10px;">0</span>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="products-grid" id="productsGrid"></div>
+    </div>
+
+    <div class="overlay" id="overlay" onclick="closeAll()"></div>
+    
+    <div class="drawer" id="cartDrawer">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <h3>Shopping Bag</h3>
+            <i class="fa-solid fa-times" onclick="toggleDrawer(false)" style="cursor: pointer;"></i>
+        </div>
+        <div id="cartItems" style="max-height: 250px; overflow-y: auto;"></div>
+        <div id="bulkMessage" style="color: var(--danger); font-weight: 700; font-size: 12px; margin: 10px 0; text-align: center;"></div>
+        <div style="border-top: 1px solid #eee; padding-top: 15px;">
+            <div style="display: flex; justify-content: space-between; font-weight: 700;">
+                <span>Total Amount:</span>
+                <span id="cartTotal">₹0</span>
+            </div>
+            <button class="btn btn-primary" style="width: 100%; margin-top: 15px;" onclick="openCheckout()">Checkout Now</button>
+        </div>
+        
+        <div class="history-box">
+            <h4 style="font-size: 13px; margin-bottom: 10px;"><i class="fa-solid fa-clock-rotate-left"></i> Previous Rituals</h4>
+            <div id="orderHistoryItems"></div>
+        </div>
+    </div>
+
+    <div class="modal" id="checkoutModal">
+        <h3>Delivery Location</h3>
+        <div style="height: 150px; background: #eee; margin: 15px 0; border-radius: 8px; overflow: hidden;">
+            <iframe id="googleMap" style="width:100%; height:100%; border:0;" src=""></iframe>
+        </div>
+        <button class="btn" style="background: #4285F4; color: white; margin-bottom: 15px;" onclick="fetchGPS()">
+            <i class="fa-solid fa-location-dot"></i> Pin My GPS Location
+        </button>
+        <input type="text" id="custAddress" placeholder="Full Delivery Address & Pincode">
+        <button class="btn btn-primary" style="width: 100%;" onclick="finalizeOrder()">Order via WhatsApp</button>
+    </div>
+
+    <a href="#" id="waFloat" class="wa-float" target="_blank"><i class="fa-brands fa-whatsapp"></i></a>
+
+    <script>
+        const WHATSAPP_NUM = "919595641664";
+        
+        const products = [
+            { id: 1, name: "Neem Healing Soap", price: 55, skin: "Acne Control", image: "IMG_9702.JPG", stock: 3 },
+            { id: 2, name: "Papaya Brightening", price: 55, skin: "Daily Glow", image: "pro.jpg", stock: 12 },
+            { id: 3, name: "Sacred Tulsi Ritual", price: 55, skin: "Purifying", image: "pro1.jpg", stock: 2 },
+            { id: 4, name: "Aloe Soothing Soap", price: 55, skin: "Sensitive", image: "pro4.jpg", stock: 20 },
+            { id: 5, name: "D-Tan Charcoal", price: 55, skin: "Tanned Skin", image: "pro5.jpg", stock: 0 },
+            { id: 6, name: "Royal Rose Soap", price: 55, skin: "Softening", image: "pro3.jpg", stock: 8 }
+        ];
+
+        let cart = [];
+        document.getElementById('waFloat').href = `https://wa.me/${WHATSAPP_NUM}`;
+
+        function renderProducts() {
+            const grid = document.getElementById('productsGrid');
+            grid.innerHTML = products.map(p => {
+                const isLowStock = p.stock > 0 && p.stock <= 5;
+                const isSoldOut = p.stock === 0;
+                
+                return `
+                <div class="product-card ${isSoldOut ? 'sold-out' : ''}">
+                    <div class="img-wrap">
+                        <span class="skin-tag">${p.skin}</span>
+                        <img src="${p.image}" onerror="this.src='https://via.placeholder.com/250'">
+                        ${isLowStock ? `<div class="stock-alert">ONLY ${p.stock} LEFT!</div>` : ''}
+                        ${isSoldOut ? `<div class="stock-alert" style="background:#444">SOLD OUT</div>` : ''}
+                    </div>
+                    <div style="padding: 15px;">
+                        <h3 style="font-size: 18px;">${p.name}</h3>
+                        <p style="font-weight: 700; color: var(--primary);">₹${p.price}</p>
+                        <button class="btn btn-primary" onclick="addToCart(${p.id})" ${isSoldOut ? 'disabled' : ''}>
+                            ${isSoldOut ? 'Unavailable' : 'Add to Bag'}
+                        </button>
+                    </div>
+                </div>
+                `;
+            }).join('');
+        }
+
+        function addToCart(id) {
+            const product = products.find(p => p.id === id);
+            if(product && product.stock > 0) {
+                cart.push(product);
+                updateCartUI();
+                toggleDrawer(true);
+            }
+        }
+
+        function updateCartUI() {
+            const container = document.getElementById('cartItems');
+            document.getElementById('cartCount').innerText = cart.length;
+            
+            const freeItems = Math.floor(cart.length / 5);
+            const subtotal = cart.reduce((s, i) => s + i.price, 0);
+            const finalTotal = subtotal - (freeItems * 55);
+
+            document.getElementById('bulkMessage').innerText = freeItems > 0 ? `🎊 Discount Applied: ${freeItems} FREE Soap(s)!` : "Add 5 soaps to get 1 FREE!";
+            document.getElementById('cartTotal').innerText = `₹${finalTotal}`;
+
+            container.innerHTML = cart.map((item, idx) => `
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; font-size: 13px; background: #fdfbf7; padding: 8px; border-radius: 4px;">
+                    <span>${item.name}</span>
+                    <i class="fa-solid fa-trash" style="color: var(--danger); cursor: pointer;" onclick="removeItem(${idx})"></i>
+                </div>
+            `).join('');
+        }
+
+        function removeItem(idx) { cart.splice(idx, 1); updateCartUI(); }
+
+        function saveOrderToHistory() {
+            let history = JSON.parse(localStorage.getItem('hh_orders') || '[]');
+            const orderData = {
+                date: new Date().toLocaleDateString(),
+                itemIds: cart.map(i => i.id),
+                summary: cart.map(i => i.name).join(", ")
+            };
+            history.unshift(orderData);
+            localStorage.setItem('hh_orders', JSON.stringify(history.slice(0, 5)));
+            renderHistory();
+        }
+
+        function repeatOrder(ids) {
+            cart = [];
+            ids.forEach(id => {
+                const p = products.find(prod => prod.id === id);
+                if(p && p.stock > 0) cart.push(p);
+            });
+            updateCartUI();
+            toggleDrawer(true);
+        }
+
+        function renderHistory() {
+            const histCont = document.getElementById('orderHistoryItems');
+            const history = JSON.parse(localStorage.getItem('hh_orders') || '[]');
+            histCont.innerHTML = history.length ? history.map(h => `
+                <div class="history-item">
+                    <div style="max-width: 70%;">
+                        <b>${h.date}</b><br>
+                        <span style="font-size: 10px; color: #666;">${h.summary.substring(0, 40)}...</span>
+                    </div>
+                    <button class="btn btn-repeat" onclick='repeatOrder(${JSON.stringify(h.itemIds)})'>Repeat</button>
+                </div>
+            `).join('') : '<p style="font-size:10px; color:#999;">Your past ritual orders will appear here.</p>';
+        }
+
+        function fetchGPS() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(pos => {
+                    const lat = pos.coords.latitude;
+                    const lon = pos.coords.longitude;
+                    document.getElementById('googleMap').src = `https://maps.google.com/maps?q=${lat},${lon}&z=15&output=embed`;
+                    document.getElementById('custAddress').value = `GPS Coords: ${lat.toFixed(4)}, ${lon.toFixed(4)}`;
+                }, () => alert("GPS failed. Please enter address manually."));
+            }
+        }
+
+        function finalizeOrder() {
+            const addr = document.getElementById('custAddress').value;
+            if(!addr) return alert("Please provide a delivery address.");
+            
+            const total = document.getElementById('cartTotal').innerText;
+            const itemsList = cart.map(i => i.name).join(", ");
+            const msg = `New Order from Herbal&Heaven:\n\nItems: ${itemsList}\nTotal: ${total}\nAddress: ${addr}`;
+            
+            saveOrderToHistory();
+            window.open(`https://wa.me/${WHATSAPP_NUM}?text=${encodeURIComponent(msg)}`, '_blank');
+            cart = []; updateCartUI(); closeAll();
+        }
+
+        function toggleDrawer(open) { document.getElementById('cartDrawer').classList.toggle('active', open); document.getElementById('overlay').classList.toggle('active', open); }
+        function openCheckout() { if(cart.length === 0) return alert("Bag is empty!"); document.getElementById('checkoutModal').classList.add('active'); toggleDrawer(false); }
+        function closeAll() { document.getElementById('checkoutModal').classList.remove('active'); document.getElementById('overlay').classList.remove('active'); toggleDrawer(false); }
+
+        // Timer Function
+        let timeInSeconds = 3600; // 1 Hour
+        setInterval(() => {
+            let h = Math.floor(timeInSeconds / 3600);
+            let m = Math.floor((timeInSeconds % 3600) / 60);
+            let s = timeInSeconds % 60;
+            document.getElementById('timer').innerText = `${h}:${m < 10 ? '0' : ''}${m}:${s < 10 ? '0' : ''}${s}`;
+            timeInSeconds--;
+        }, 1000);
+
+        // Initial Load
+        renderProducts();
+        renderHistory();
+    </script>
+</body>
+</html>
