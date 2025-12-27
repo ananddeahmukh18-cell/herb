@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Herbal&Heaven | Premium Organic Rituals</title>
+    <title>Herbal&Heaven | Nature's Pure Essence</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Playfair+Display:ital,wght@0,400;0,700&display=swap" rel="stylesheet">
@@ -23,79 +23,98 @@
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: var(--font-body); background-color: #fdfbf7; color: var(--text-dark); line-height: 1.6; }
+        body { font-family: var(--font-body); background-color: #fdfbf7; color: var(--text-dark); line-height: 1.6; overflow-x: hidden; }
         
-        /* Sales Timer Banner */
+        /* Sales Banner */
         .timer-banner { background: var(--primary); color: var(--white); text-align: center; padding: 8px; font-size: 13px; letter-spacing: 1px; }
         #timer { font-weight: 700; color: var(--accent); }
 
-        /* Header & Logo */
-        header {
-            position: sticky; top: 0; z-index: 1000;
-            background: rgba(253, 251, 247, 0.95);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(0,0,0,0.05);
-            padding: 10px 20px;
-        }
+        /* Header */
+        header { position: sticky; top: 0; z-index: 1000; background: rgba(253, 251, 247, 0.95); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(0,0,0,0.05); padding: 10px 20px; }
         .nav-wrapper { display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto; }
         .logo-container { display: flex; align-items: center; gap: 12px; text-decoration: none; }
-        .brand-logo-img { width: 50px; height: 50px; border-radius: 50%; object-fit: contain; }
-        .logo-text { font-family: var(--font-heading); font-size: 24px; font-weight: 700; color: var(--primary); }
+        .brand-logo-img { width: 45px; height: 45px; border-radius: 50%; object-fit: contain; }
+        .logo-text { font-family: var(--font-heading); font-size: 22px; font-weight: 700; color: var(--primary); }
+
+        /* Story Highlights */
+        .stories-container { display: flex; gap: 20px; padding: 20px; overflow-x: auto; max-width: 1200px; margin: 0 auto; scrollbar-width: none; }
+        .stories-container::-webkit-scrollbar { display: none; }
+        .story { display: flex; flex-direction: column; align-items: center; gap: 8px; cursor: pointer; min-width: 80px; }
+        .story-img-circle { width: 70px; height: 70px; border-radius: 50%; border: 2px solid var(--accent); padding: 3px; background: white; transition: var(--transition); }
+        .story:hover .story-img-circle { transform: scale(1.1); border-color: var(--primary); }
+        .story span { font-size: 11px; font-weight: 700; color: var(--primary); text-transform: uppercase; }
 
         /* Products Grid */
-        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px 40px; }
         .products-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; margin-top: 20px; }
-        .product-card { background: white; border-radius: 8px; overflow: hidden; box-shadow: var(--shadow); border: 1px solid #f0f0f0; transition: var(--transition); text-align: center; padding-bottom: 20px; position: relative; }
+        .product-card { background: white; border-radius: 12px; overflow: hidden; box-shadow: var(--shadow); border: 1px solid #f0f0f0; transition: var(--transition); text-align: center; padding-bottom: 20px; position: relative; }
         .product-card:hover { transform: translateY(-5px); }
         
-        /* Inventory Alerts */
-        .stock-alert { position: absolute; bottom: 85px; left: 0; right: 0; background: rgba(231, 76, 60, 0.9); color: white; font-size: 10px; padding: 2px 0; font-weight: 700; z-index: 3; }
+        /* Stock Logic */
+        .stock-alert { position: absolute; bottom: 85px; left: 0; right: 0; background: rgba(231, 76, 60, 0.9); color: white; font-size: 10px; padding: 3px 0; font-weight: 700; z-index: 3; text-transform: uppercase; }
         .sold-out { opacity: 0.6; filter: grayscale(1); pointer-events: none; }
 
-        .img-wrap { height: 250px; position: relative; overflow: hidden; }
+        .img-wrap { height: 260px; position: relative; overflow: hidden; background: #eee; }
         .img-wrap img { width: 100%; height: 100%; object-fit: cover; }
-        .skin-tag { position: absolute; top: 10px; right: 10px; background: white; padding: 3px 8px; font-size: 10px; font-weight: 700; border-radius: 4px; z-index: 2; }
+        .skin-tag { position: absolute; top: 12px; right: 12px; background: white; padding: 4px 10px; font-size: 10px; font-weight: 700; border-radius: 6px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
         
         /* Buttons */
-        .btn { padding: 10px 20px; border-radius: 50px; border: none; cursor: pointer; font-weight: 700; text-transform: uppercase; font-size: 11px; transition: var(--transition); }
-        .btn-primary { background: var(--primary); color: white; width: 80%; }
-        .btn-primary:disabled { background: #ccc; cursor: not-allowed; }
-        .btn-repeat { background: var(--accent); color: white; padding: 4px 10px; font-size: 9px; margin-top: 5px; }
+        .btn { padding: 12px 20px; border-radius: 50px; border: none; cursor: pointer; font-weight: 700; text-transform: uppercase; font-size: 11px; transition: var(--transition); }
+        .btn-primary { background: var(--primary); color: white; width: 85%; margin-top: 10px; }
+        .btn-primary:disabled { background: #ccc; }
+        .btn-repeat { background: var(--accent); color: white; padding: 5px 12px; font-size: 9px; }
 
-        /* Cart Drawer */
+        /* Drawer & Modals */
         .drawer { position: fixed; top: 0; right: -400px; width: 380px; height: 100%; background: white; z-index: 2000; transition: 0.4s; padding: 25px; box-shadow: -10px 0 30px rgba(0,0,0,0.1); display: flex; flex-direction: column; }
         .drawer.active { right: 0; }
         .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: none; z-index: 1500; }
         .overlay.active { display: block; }
-
-        /* Checkout Modal */
-        .modal { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 95%; max-width: 450px; background: white; z-index: 3000; padding: 25px; border-radius: 12px; display: none; box-shadow: 0 20px 50px rgba(0,0,0,0.2); }
+        .modal { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 95%; max-width: 450px; background: white; z-index: 3000; padding: 25px; border-radius: 15px; display: none; box-shadow: 0 20px 50px rgba(0,0,0,0.3); }
         .modal.active { display: block; }
-        
-        /* Order History */
-        .history-box { margin-top: 20px; padding-top: 15px; border-top: 2px dashed #eee; flex-grow: 1; overflow-y: auto; }
-        .history-item { font-size: 12px; background: #f9f9f9; padding: 10px; margin-bottom: 8px; border-radius: 4px; border-left: 3px solid var(--accent); display: flex; justify-content: space-between; align-items: center; }
 
-        .wa-float { position: fixed; bottom: 20px; right: 20px; background: #25d366; color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 30px; z-index: 1001; text-decoration: none; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
-        input { width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 5px; font-family: var(--font-body); }
+        /* History */
+        .history-box { margin-top: auto; padding-top: 15px; border-top: 2px dashed #eee; max-height: 200px; overflow-y: auto; }
+        .history-item { font-size: 12px; background: #f9f9f9; padding: 12px; margin-bottom: 10px; border-radius: 8px; border-left: 4px solid var(--accent); display: flex; justify-content: space-between; align-items: center; }
+
+        .wa-float { position: fixed; bottom: 25px; right: 25px; background: #25d366; color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 30px; z-index: 1001; text-decoration: none; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+        input { width: 100%; padding: 12px; margin-bottom: 12px; border: 1px solid #ddd; border-radius: 8px; font-family: var(--font-body); outline-color: var(--primary); }
     </style>
 </head>
 <body>
 
-    <div class="timer-banner">EXCLUSIVE OFFER: Buy 4 soaps and get 1 FREE! Ends in: <span id="timer">00:00:00</span></div>
+    <div class="timer-banner">OFFER: Buy 4 rituals, get the 5th FREE! Ends in: <span id="timer">00:00:00</span></div>
 
     <header>
         <div class="nav-wrapper">
             <a href="#" class="logo-container">
-                <img src="Herbal&Heaven.png" alt="Herbal&Heaven" class="brand-logo-img">
+                <img src="Herbal&Heaven.png" alt="Logo" class="brand-logo-img">
                 <span class="logo-text">Herbal&Heaven</span>
             </a>
             <div style="cursor: pointer; position: relative;" onclick="toggleDrawer(true)">
-                <i class="fa-solid fa-shopping-bag" style="font-size: 22px; color: var(--primary);"></i>
-                <span id="cartCount" style="background: var(--danger); color: white; border-radius: 50%; padding: 2px 6px; font-size: 10px; position: absolute; top: -8px; right: -10px;">0</span>
+                <i class="fa-solid fa-shopping-bag" style="font-size: 24px; color: var(--primary);"></i>
+                <span id="cartCount" style="background: var(--danger); color: white; border-radius: 50%; padding: 2px 7px; font-size: 10px; position: absolute; top: -10px; right: -12px; font-weight: 700;">0</span>
             </div>
         </div>
     </header>
+
+    <div class="stories-container">
+        <div class="story" onclick="filterCat('all')">
+            <img src="pro.jpg" class="story-img-circle" alt="All">
+            <span>All Rituals</span>
+        </div>
+        <div class="story" onclick="filterCat('Best Seller')">
+            <img src="pro1.jpg" class="story-img-circle" alt="Best Seller">
+            <span>Best Seller</span>
+        </div>
+        <div class="story" onclick="filterCat('New')">
+            <img src="pro3.jpg" class="story-img-circle" alt="New Arrival">
+            <span>New</span>
+        </div>
+        <div class="story" onclick="filterCat('Offer')">
+            <img src="pro4.jpg" class="story-img-circle" alt="Offers">
+            <span>Offers</span>
+        </div>
+    </div>
 
     <div class="container">
         <div class="products-grid" id="productsGrid"></div>
@@ -104,36 +123,35 @@
     <div class="overlay" id="overlay" onclick="closeAll()"></div>
     
     <div class="drawer" id="cartDrawer">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-            <h3>Shopping Bag</h3>
-            <i class="fa-solid fa-times" onclick="toggleDrawer(false)" style="cursor: pointer;"></i>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+            <h3 style="font-family: var(--font-heading);">Your Skincare Bag</h3>
+            <i class="fa-solid fa-times" onclick="toggleDrawer(false)" style="cursor: pointer; font-size: 20px;"></i>
         </div>
-        <div id="cartItems" style="max-height: 250px; overflow-y: auto;"></div>
-        <div id="bulkMessage" style="color: var(--danger); font-weight: 700; font-size: 12px; margin: 10px 0; text-align: center;"></div>
-        <div style="border-top: 1px solid #eee; padding-top: 15px;">
-            <div style="display: flex; justify-content: space-between; font-weight: 700;">
-                <span>Total Amount:</span>
+        <div id="cartItems" style="flex: 1; overflow-y: auto;"></div>
+        <div id="bulkMessage" style="color: var(--danger); font-weight: 700; font-size: 12px; margin: 15px 0; text-align: center; background: #fff5f5; padding: 5px; border-radius: 5px;"></div>
+        <div style="border-top: 1px solid #eee; padding-top: 20px;">
+            <div style="display: flex; justify-content: space-between; font-weight: 700; font-size: 18px; color: var(--primary);">
+                <span>Total:</span>
                 <span id="cartTotal">₹0</span>
             </div>
-            <button class="btn btn-primary" style="width: 100%; margin-top: 15px;" onclick="openCheckout()">Checkout Now</button>
+            <button class="btn btn-primary" style="width: 100%; margin-top: 20px;" onclick="openCheckout()">Checkout</button>
         </div>
-        
         <div class="history-box">
-            <h4 style="font-size: 13px; margin-bottom: 10px;"><i class="fa-solid fa-clock-rotate-left"></i> Previous Rituals</h4>
+            <h4 style="font-size: 13px; margin-bottom: 12px;"><i class="fa-solid fa-clock-rotate-left"></i> Recent Orders</h4>
             <div id="orderHistoryItems"></div>
         </div>
     </div>
 
     <div class="modal" id="checkoutModal">
-        <h3>Delivery Location</h3>
-        <div style="height: 150px; background: #eee; margin: 15px 0; border-radius: 8px; overflow: hidden;">
+        <h3 style="font-family: var(--font-heading); margin-bottom: 15px;">Confirm Delivery</h3>
+        <div style="height: 160px; background: #eee; margin-bottom: 15px; border-radius: 12px; overflow: hidden;">
             <iframe id="googleMap" style="width:100%; height:100%; border:0;" src=""></iframe>
         </div>
-        <button class="btn" style="background: #4285F4; color: white; margin-bottom: 15px;" onclick="fetchGPS()">
-            <i class="fa-solid fa-location-dot"></i> Pin My GPS Location
+        <button class="btn" style="background: #4285F4; color: white; margin-bottom: 15px; width: 100%;" onclick="fetchGPS()">
+            <i class="fa-solid fa-location-arrow"></i> Use Precise GPS Location
         </button>
-        <input type="text" id="custAddress" placeholder="Full Delivery Address & Pincode">
-        <button class="btn btn-primary" style="width: 100%;" onclick="finalizeOrder()">Order via WhatsApp</button>
+        <input type="text" id="custAddress" placeholder="Full Delivery Address (House No, Street)">
+        <button class="btn btn-primary" style="width: 100%;" onclick="finalizeOrder()">Place WhatsApp Order</button>
     </div>
 
     <a href="#" id="waFloat" class="wa-float" target="_blank"><i class="fa-brands fa-whatsapp"></i></a>
@@ -142,41 +160,44 @@
         const WHATSAPP_NUM = "919595641664";
         
         const products = [
-            { id: 1, name: "Neem Healing Soap", price: 55, skin: "Acne Control", image: "IMG_9702.JPG", stock: 3 },
-            { id: 2, name: "Papaya Brightening", price: 55, skin: "Daily Glow", image: "pro.jpg", stock: 12 },
-            { id: 3, name: "Sacred Tulsi Ritual", price: 55, skin: "Purifying", image: "pro1.jpg", stock: 2 },
-            { id: 4, name: "Aloe Soothing Soap", price: 55, skin: "Sensitive", image: "pro4.jpg", stock: 20 },
-            { id: 5, name: "D-Tan Charcoal", price: 55, skin: "Tanned Skin", image: "pro5.jpg", stock: 0 },
-            { id: 6, name: "Royal Rose Soap", price: 55, skin: "Softening", image: "pro3.jpg", stock: 8 }
+            { id: 1, name: "Neem Healing Soap", price: 55, skin: "Acne Control", image: "IMG_9702.JPG", stock: 3, category: "Best Seller" },
+            { id: 2, name: "Papaya Brightening", price: 55, skin: "Daily Glow", image: "pro.jpg", stock: 12, category: "Best Seller" },
+            { id: 3, name: "Sacred Tulsi Ritual", price: 55, skin: "Purifying", image: "pro1.jpg", stock: 2, category: "New" },
+            { id: 4, name: "Aloe Soothing Soap", price: 55, skin: "Sensitive", image: "pro4.jpg", stock: 20, category: "Best Seller" },
+            { id: 5, name: "D-Tan Charcoal", price: 55, skin: "Tanned Skin", image: "pro5.jpg", stock: 0, category: "New" },
+            { id: 6, name: "Royal Rose Soap", price: 55, skin: "Softening", image: "pro3.jpg", stock: 8, category: "Offer" }
         ];
 
         let cart = [];
-        document.getElementById('waFloat').href = `https://wa.me/${WHATSAPP_NUM}`;
+        document.getElementById('waFloat').href = `https://wa.me/${WHATSAPP_NUM}?text=Hi Herbal%26Heaven, I need assistance.`;
 
-        function renderProducts() {
+        function renderProducts(filtered = products) {
             const grid = document.getElementById('productsGrid');
-            grid.innerHTML = products.map(p => {
-                const isLowStock = p.stock > 0 && p.stock <= 5;
-                const isSoldOut = p.stock === 0;
-                
+            grid.innerHTML = filtered.map(p => {
+                const low = p.stock > 0 && p.stock <= 5;
+                const out = p.stock === 0;
                 return `
-                <div class="product-card ${isSoldOut ? 'sold-out' : ''}">
+                <div class="product-card ${out ? 'sold-out' : ''}">
                     <div class="img-wrap">
                         <span class="skin-tag">${p.skin}</span>
                         <img src="${p.image}" onerror="this.src='https://via.placeholder.com/250'">
-                        ${isLowStock ? `<div class="stock-alert">ONLY ${p.stock} LEFT!</div>` : ''}
-                        ${isSoldOut ? `<div class="stock-alert" style="background:#444">SOLD OUT</div>` : ''}
+                        ${low ? `<div class="stock-alert">Only ${p.stock} units left!</div>` : ''}
+                        ${out ? `<div class="stock-alert" style="background:#444">Stock Out</div>` : ''}
                     </div>
                     <div style="padding: 15px;">
-                        <h3 style="font-size: 18px;">${p.name}</h3>
-                        <p style="font-weight: 700; color: var(--primary);">₹${p.price}</p>
-                        <button class="btn btn-primary" onclick="addToCart(${p.id})" ${isSoldOut ? 'disabled' : ''}>
-                            ${isSoldOut ? 'Unavailable' : 'Add to Bag'}
+                        <h3 style="font-size: 17px; margin-bottom: 5px;">${p.name}</h3>
+                        <p style="font-weight: 700; color: var(--primary); font-size: 18px;">₹${p.price}</p>
+                        <button class="btn btn-primary" onclick="addToCart(${p.id})" ${out ? 'disabled' : ''}>
+                            ${out ? 'Sold Out' : 'Add to Bag'}
                         </button>
                     </div>
-                </div>
-                `;
+                </div>`;
             }).join('');
+        }
+
+        function filterCat(cat) {
+            const filtered = cat === 'all' ? products : products.filter(p => p.category === cat);
+            renderProducts(filtered);
         }
 
         function addToCart(id) {
@@ -191,17 +212,16 @@
         function updateCartUI() {
             const container = document.getElementById('cartItems');
             document.getElementById('cartCount').innerText = cart.length;
-            
-            const freeItems = Math.floor(cart.length / 5);
+            const freeCount = Math.floor(cart.length / 5);
             const subtotal = cart.reduce((s, i) => s + i.price, 0);
-            const finalTotal = subtotal - (freeItems * 55);
+            const finalTotal = subtotal - (freeCount * 55);
 
-            document.getElementById('bulkMessage').innerText = freeItems > 0 ? `🎊 Discount Applied: ${freeItems} FREE Soap(s)!` : "Add 5 soaps to get 1 FREE!";
+            document.getElementById('bulkMessage').innerText = freeCount > 0 ? `🎉 Bulk Discount: ${freeCount} soap(s) FREE!` : "Add 5 soaps to unlock the 5th for FREE!";
             document.getElementById('cartTotal').innerText = `₹${finalTotal}`;
 
             container.innerHTML = cart.map((item, idx) => `
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; font-size: 13px; background: #fdfbf7; padding: 8px; border-radius: 4px;">
-                    <span>${item.name}</span>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; background: #fdfbf7; padding: 10px; border-radius: 8px;">
+                    <span style="font-size: 13px; font-weight: 700;">${item.name}</span>
                     <i class="fa-solid fa-trash" style="color: var(--danger); cursor: pointer;" onclick="removeItem(${idx})"></i>
                 </div>
             `).join('');
@@ -209,15 +229,11 @@
 
         function removeItem(idx) { cart.splice(idx, 1); updateCartUI(); }
 
-        function saveOrderToHistory() {
-            let history = JSON.parse(localStorage.getItem('hh_orders') || '[]');
-            const orderData = {
-                date: new Date().toLocaleDateString(),
-                itemIds: cart.map(i => i.id),
-                summary: cart.map(i => i.name).join(", ")
-            };
-            history.unshift(orderData);
-            localStorage.setItem('hh_orders', JSON.stringify(history.slice(0, 5)));
+        function saveOrderHistory() {
+            let history = JSON.parse(localStorage.getItem('hh_v2_orders') || '[]');
+            const data = { date: new Date().toLocaleDateString(), ids: cart.map(i => i.id), names: cart.map(i => i.name).join(", ") };
+            history.unshift(data);
+            localStorage.setItem('hh_v2_orders', JSON.stringify(history.slice(0, 5)));
             renderHistory();
         }
 
@@ -232,58 +248,50 @@
         }
 
         function renderHistory() {
-            const histCont = document.getElementById('orderHistoryItems');
-            const history = JSON.parse(localStorage.getItem('hh_orders') || '[]');
-            histCont.innerHTML = history.length ? history.map(h => `
+            const box = document.getElementById('orderHistoryItems');
+            const history = JSON.parse(localStorage.getItem('hh_v2_orders') || '[]');
+            box.innerHTML = history.length ? history.map(h => `
                 <div class="history-item">
-                    <div style="max-width: 70%;">
-                        <b>${h.date}</b><br>
-                        <span style="font-size: 10px; color: #666;">${h.summary.substring(0, 40)}...</span>
-                    </div>
-                    <button class="btn btn-repeat" onclick='repeatOrder(${JSON.stringify(h.itemIds)})'>Repeat</button>
+                    <div style="max-width: 65%;"><b>${h.date}</b><br><span style="font-size: 9px; color: #777;">${h.names.substring(0, 35)}...</span></div>
+                    <button class="btn btn-repeat" onclick='repeatOrder(${JSON.stringify(h.ids)})'>Repeat</button>
                 </div>
-            `).join('') : '<p style="font-size:10px; color:#999;">Your past ritual orders will appear here.</p>';
+            `).join('') : '<p style="font-size:10px; color:#999; text-align:center;">Your order history will appear here.</p>';
         }
 
         function fetchGPS() {
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(pos => {
-                    const lat = pos.coords.latitude;
-                    const lon = pos.coords.longitude;
-                    document.getElementById('googleMap').src = `https://maps.google.com/maps?q=${lat},${lon}&z=15&output=embed`;
-                    document.getElementById('custAddress').value = `GPS Coords: ${lat.toFixed(4)}, ${lon.toFixed(4)}`;
-                }, () => alert("GPS failed. Please enter address manually."));
+                    const { latitude, longitude } = pos.coords;
+                    document.getElementById('googleMap').src = `https://maps.google.com/maps?q=${latitude},${longitude}&z=15&output=embed`;
+                    document.getElementById('custAddress').value = `GPS Coords: ${latitude.toFixed(4)}, ${longitude.toFixed(4)}`;
+                }, () => alert("Permission denied. Enter address manually."));
             }
         }
 
         function finalizeOrder() {
             const addr = document.getElementById('custAddress').value;
-            if(!addr) return alert("Please provide a delivery address.");
-            
+            if(!addr || cart.length === 0) return alert("Missing items or address.");
             const total = document.getElementById('cartTotal').innerText;
-            const itemsList = cart.map(i => i.name).join(", ");
-            const msg = `New Order from Herbal&Heaven:\n\nItems: ${itemsList}\nTotal: ${total}\nAddress: ${addr}`;
-            
-            saveOrderToHistory();
-            window.open(`https://wa.me/${WHATSAPP_NUM}?text=${encodeURIComponent(msg)}`, '_blank');
+            const msg = `New Herbal%26Heaven Order:%0A------------------%0AItems: ${cart.map(i => i.name).join(", ")}%0ATotal: ${total}%0ADelivery: ${addr}`;
+            saveOrderHistory();
+            window.open(`https://wa.me/${WHATSAPP_NUM}?text=${msg}`, '_blank');
             cart = []; updateCartUI(); closeAll();
         }
 
         function toggleDrawer(open) { document.getElementById('cartDrawer').classList.toggle('active', open); document.getElementById('overlay').classList.toggle('active', open); }
-        function openCheckout() { if(cart.length === 0) return alert("Bag is empty!"); document.getElementById('checkoutModal').classList.add('active'); toggleDrawer(false); }
-        function closeAll() { document.getElementById('checkoutModal').classList.remove('active'); document.getElementById('overlay').classList.remove('active'); toggleDrawer(false); }
+        function openCheckout() { if(cart.length === 0) return alert("Bag is empty."); document.getElementById('checkoutModal').classList.add('active'); toggleDrawer(false); }
+        function closeAll() { document.querySelectorAll('.modal, .drawer, .overlay').forEach(el => el.classList.remove('active')); }
 
-        // Timer Function
-        let timeInSeconds = 3600; // 1 Hour
+        // Timer Logic
+        let totalSeconds = 14400; // 4 Hours
         setInterval(() => {
-            let h = Math.floor(timeInSeconds / 3600);
-            let m = Math.floor((timeInSeconds % 3600) / 60);
-            let s = timeInSeconds % 60;
+            let h = Math.floor(totalSeconds / 3600);
+            let m = Math.floor((totalSeconds % 3600) / 60);
+            let s = totalSeconds % 60;
             document.getElementById('timer').innerText = `${h}:${m < 10 ? '0' : ''}${m}:${s < 10 ? '0' : ''}${s}`;
-            timeInSeconds--;
+            totalSeconds--;
         }, 1000);
 
-        // Initial Load
         renderProducts();
         renderHistory();
     </script>
