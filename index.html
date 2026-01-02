@@ -11,6 +11,9 @@
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
+<!-- Add SheetJS for Excel export -->
+<script src="https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js"></script>
+
 <style>
 /* ---------- 1. Variables & Reset ---------- */
 :root {
@@ -234,7 +237,31 @@ header {
 }
 .whatsapp-float:hover { transform: scale(1.1); }
 
-/* invoice box */
+/* ---------- 9. Admin Panel Styles ---------- */
+.admin-modal { max-width: 800px; height: 80vh; overflow-y: auto; }
+.admin-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+.admin-table-container { overflow-x: auto; margin: 20px 0; }
+.admin-table {
+  width: 100%; border-collapse: collapse; font-size: 14px;
+}
+.admin-table th, .admin-table td {
+  padding: 10px; text-align: left; border-bottom: 1px solid #eee;
+}
+.admin-table th { background: #f8f9fa; font-weight: 700; color: var(--primary); }
+.admin-table tr:hover { background: #f9f9f9; }
+.login-modal { max-width: 400px; }
+.payment-buttons { display: flex; flex-direction: column; gap: 12px; margin: 20px 0; }
+.payment-btn {
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  padding: 12px; border-radius: 8px; font-weight: 600; transition: var(--transition);
+  color: white; border: none; width: 100%; font-size: 14px;
+}
+.payment-btn.gpay { background: #4285F4; }
+.payment-btn.paytm { background: #20336B; }
+.payment-btn.phonepe { background: #5F259F; }
+.payment-btn:hover { opacity: 0.9; transform: translateY(-2px); }
+
+/* ---------- 10. Invoice Box ---------- */
 #invoiceBox{
   max-width:600px;
   margin:40px auto;
@@ -254,6 +281,7 @@ header {
   .nav-menu { display: none; }
   .cart-drawer { width: 100%; right: -100%; }
   .hero h1 { font-size: 32px; }
+  .payment-buttons { flex-direction: column; }
 }
 </style>
 </head>
@@ -266,7 +294,6 @@ header {
 <header>
   <div class="container nav-wrapper">
     <a href="#" class="logo">
-      <!-- place herb.jpg (your logo) in the repo root -->
       <img src="herb.jpg" alt="Herbal & Heaven logo">
       <span>Herbal&Heaven</span>
     </a>
@@ -275,6 +302,7 @@ header {
       <a href="#products">Shop</a>
       <a href="#about">About</a>
       <a href="#contact">Contact</a>
+      <a href="#" onclick="openAdminLogin()">Admin</a>
     </nav>
     <div class="nav-icons">
       <div class="cart-icon-wrap" onclick="toggleCart()">
@@ -356,6 +384,7 @@ header {
   </div>
 </div>
 
+<!-- Checkout Modal -->
 <div class="modal" id="checkoutModal">
   <button onclick="closeCheckout()" style="position: absolute; right: 20px; top: 20px; font-size: 20px;"><i class="fa-solid fa-times"></i></button>
 
@@ -379,8 +408,28 @@ header {
   </div>
 
   <div id="checkoutStep2" class="qr-section">
-    <h3 style="margin-bottom: 10px;">Scan to Pay</h3>
+    <h3 style="margin-bottom: 10px;">Choose Payment Method</h3>
     <p style="font-size: 14px; color: #666; margin-bottom: 15px;">Total Amount: <strong id="qrAmount">₹0</strong></p>
+    
+    <!-- Payment Gateway Buttons -->
+    <div class="payment-buttons">
+      <button class="payment-btn gpay" onclick="openGPay()">
+        <i class="fa-brands fa-google"></i> Pay with Google Pay
+      </button>
+      <button class="payment-btn paytm" onclick="openPaytm()">
+        <i class="fa-solid fa-indian-rupee-sign"></i> Pay with Paytm
+      </button>
+      <button class="payment-btn phonepe" onclick="openPhonePe()">
+        <i class="fa-solid fa-mobile-screen"></i> Pay with PhonePe
+      </button>
+    </div>
+
+    <div style="text-align: center; margin: 20px 0;">
+      <div style="font-size: 12px; color: #999; margin-bottom: 10px;">OR</div>
+    </div>
+
+    <!-- Existing QR Code Method -->
+    <h4 style="margin: 20px 0 10px;">Scan QR Code</h4>
     <img id="qrImage" src="" alt="Payment QR Code" width="200" height="200">
     <div class="upi-id-display">
       UPI ID: <span id="displayUpi">herbalheaven@upi</span>
@@ -401,10 +450,70 @@ header {
   </div>
 </div>
 
+<!-- Admin Login Modal -->
+<div class="modal login-modal" id="adminLoginModal">
+  <button onclick="closeAdminLogin()" style="position: absolute; right: 20px; top: 20px; font-size: 20px;"><i class="fa-solid fa-times"></i></button>
+  
+  <h3 style="margin-bottom: 20px; text-align: center;">Admin Login</h3>
+  <div class="form-group">
+    <label>Admin Password</label>
+    <input type="password" id="adminPassword" placeholder="Enter admin password" style="width: 100%;">
+  </div>
+  <button class="btn btn-primary" style="width: 100%;" onclick="loginAdmin()">
+    <i class="fa-solid fa-lock"></i> Login
+  </button>
+  <p style="font-size: 12px; color: #666; margin-top: 15px; text-align: center;">
+    Default password: admin123 (change in code)
+  </p>
+</div>
+
+<!-- Admin Dashboard Modal -->
+<div class="modal admin-modal" id="adminDashboard">
+  <button onclick="closeAdminDashboard()" style="position: absolute; right: 20px; top: 20px; font-size: 20px;"><i class="fa-solid fa-times"></i></button>
+  
+  <div class="admin-header">
+    <h3>Admin Dashboard</h3>
+    <div style="display: flex; gap: 10px;">
+      <button class="btn btn-secondary" onclick="exportToExcel()">
+        <i class="fa-solid fa-download"></i> Export to Excel
+      </button>
+      <button class="btn btn-primary" onclick="refreshOrders()">
+        <i class="fa-solid fa-sync"></i> Refresh
+      </button>
+    </div>
+  </div>
+  
+  <div class="admin-table-container">
+    <table class="admin-table" id="ordersTable">
+      <thead>
+        <tr>
+          <th>Order ID</th>
+          <th>Date</th>
+          <th>Customer Name</th>
+          <th>Phone</th>
+          <th>Address</th>
+          <th>Items</th>
+          <th>Total Amount</th>
+          <th>Payment Method</th>
+        </tr>
+      </thead>
+      <tbody id="ordersTableBody">
+        <!-- Orders will be populated here -->
+      </tbody>
+    </table>
+  </div>
+  
+  <div style="margin-top: 20px; font-size: 14px; color: #666;">
+    <p>Total Orders: <span id="totalOrders">0</span></p>
+    <p>Total Revenue: ₹<span id="totalRevenue">0</span></p>
+  </div>
+</div>
+
 <script>
 // ---------------- Configuration ----------------
 const MERCHANT_UPI_ID = "damareomkar96@oksbi";
 const MERCHANT_NAME = "HerbalHeaven";
+const ADMIN_PASSWORD = "omti96"; // Change this to your preferred password
 
 // ---------------- Product Data (6 + extra samples) ----------------
 const products = [
@@ -420,6 +529,12 @@ const products = [
 ];
 
 let cart = [];
+let isAdminLoggedIn = false;
+
+// Initialize orders in localStorage if not exists
+if (!localStorage.getItem('herbalHeavenOrders')) {
+  localStorage.setItem('herbalHeavenOrders', JSON.stringify([]));
+}
 
 // ---------------- Initialization ----------------
 document.addEventListener('DOMContentLoaded', () => {
@@ -427,7 +542,7 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('displayUpi').innerText = MERCHANT_UPI_ID;
 });
 
-// ---------------- Functions ----------------
+// ---------------- Product Functions ----------------
 function renderProducts() {
   const grid = document.getElementById('productsGrid');
   grid.innerHTML = products.map(product => `
@@ -466,7 +581,6 @@ function addToCart(id) {
   toggleCart(true);
 }
 
-// Buy Now clears previous cart, adds only this item and opens checkout
 function buyNow(id){
   cart = [];
   const product = products.find(p => p.id === id);
@@ -582,18 +696,68 @@ function proceedToPayment(e) {
   document.getElementById('checkoutStep2').style.display = 'block';
 }
 
-// show success + basic invoice
+// ---------------- Payment Gateway Functions ----------------
+function openGPay() {
+  const totalAmount = cart.reduce((acc, item) => acc + (item.price * item.quantity), 0);
+  // GPay UPI URL format
+  const gpayUrl = `tez://upi/pay?pa=${MERCHANT_UPI_ID}&pn=${MERCHANT_NAME}&am=${totalAmount}&cu=INR`;
+  window.open(gpayUrl, '_blank');
+  // Store payment method
+  window.paymentMethodUsed = 'Google Pay';
+}
+
+function openPaytm() {
+  const totalAmount = cart.reduce((acc, item) => acc + (item.price * item.quantity), 0);
+  // Paytm UPI URL format
+  const paytmUrl = `paytmmp://upi/pay?pa=${MERCHANT_UPI_ID}&pn=${MERCHANT_NAME}&am=${totalAmount}&cu=INR`;
+  window.open(paytmUrl, '_blank');
+  window.paymentMethodUsed = 'Paytm';
+}
+
+function openPhonePe() {
+  const totalAmount = cart.reduce((acc, item) => acc + (item.price * item.quantity), 0);
+  // PhonePe UPI URL format
+  const phonepeUrl = `phonepe://upi/pay?pa=${MERCHANT_UPI_ID}&pn=${MERCHANT_NAME}&am=${totalAmount}&cu=INR`;
+  window.open(phonepeUrl, '_blank');
+  window.paymentMethodUsed = 'PhonePe';
+}
+
+// ---------------- Order Management ----------------
 function finishOrder() {
   document.getElementById('checkoutStep2').style.display = 'none';
   document.getElementById('checkoutStep3').style.display = 'block';
 
   const totalAmount = cart.reduce((acc, item) => acc + (item.price * item.quantity), 0);
+  const customerName = document.getElementById('custName').value;
+  const customerPhone = document.getElementById('custPhone').value;
+  const customerAddress = document.getElementById('custAddr').value;
 
-  // generate simple invoice
-  const invId = 'HH' + Date.now();
-  const invDate = new Date().toLocaleString();
-  document.getElementById('invId').innerText = invId;
-  document.getElementById('invDate').innerText = invDate;
+  // Create order object
+  const orderId = 'HH' + Date.now();
+  const orderDate = new Date().toLocaleString();
+  const order = {
+    id: orderId,
+    date: orderDate,
+    customerName: customerName,
+    customerPhone: customerPhone,
+    customerAddress: customerAddress,
+    items: cart.map(item => ({
+      name: item.name,
+      quantity: item.quantity,
+      price: item.price
+    })),
+    totalAmount: totalAmount,
+    paymentMethod: window.paymentMethodUsed || 'QR Code'
+  };
+
+  // Save order to localStorage
+  const orders = JSON.parse(localStorage.getItem('herbalHeavenOrders'));
+  orders.push(order);
+  localStorage.setItem('herbalHeavenOrders', JSON.stringify(orders));
+
+  // Generate invoice
+  document.getElementById('invId').innerText = orderId;
+  document.getElementById('invDate').innerText = orderDate;
 
   let listHtml = '<ul>';
   cart.forEach(i => {
@@ -606,8 +770,110 @@ function finishOrder() {
   document.getElementById('invTotal').innerText = totalAmount;
   document.getElementById('invoiceBox').style.display = 'block';
 
+  // Clear cart
   cart = [];
   updateCartUI();
+  
+  // Clear form
+  document.getElementById('custName').value = '';
+  document.getElementById('custPhone').value = '';
+  document.getElementById('custAddr').value = '';
+}
+
+// ---------------- Admin Functions ----------------
+function openAdminLogin() {
+  document.getElementById('adminLoginModal').classList.add('active');
+  document.getElementById('adminPassword').focus();
+}
+
+function closeAdminLogin() {
+  document.getElementById('adminLoginModal').classList.remove('active');
+}
+
+function loginAdmin() {
+  const password = document.getElementById('adminPassword').value;
+  if (password === ADMIN_PASSWORD) {
+    isAdminLoggedIn = true;
+    closeAdminLogin();
+    openAdminDashboard();
+  } else {
+    alert('Incorrect password!');
+  }
+}
+
+function openAdminDashboard() {
+  if (!isAdminLoggedIn) {
+    openAdminLogin();
+    return;
+  }
+  document.getElementById('adminDashboard').classList.add('active');
+  refreshOrders();
+}
+
+function closeAdminDashboard() {
+  document.getElementById('adminDashboard').classList.remove('active');
+}
+
+function refreshOrders() {
+  const orders = JSON.parse(localStorage.getItem('herbalHeavenOrders') || '[]');
+  const tbody = document.getElementById('ordersTableBody');
+  
+  if (orders.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="8" style="text-align: center; padding: 40px;">No orders yet</td></tr>';
+    document.getElementById('totalOrders').textContent = '0';
+    document.getElementById('totalRevenue').textContent = '0';
+    return;
+  }
+
+  tbody.innerHTML = orders.map(order => `
+    <tr>
+      <td>${order.id}</td>
+      <td>${order.date}</td>
+      <td>${order.customerName}</td>
+      <td>${order.customerPhone}</td>
+      <td>${order.customerAddress.substring(0, 50)}${order.customerAddress.length > 50 ? '...' : ''}</td>
+      <td>${order.items.map(item => `${item.name} (x${item.quantity})`).join(', ')}</td>
+      <td>₹${order.totalAmount}</td>
+      <td>${order.paymentMethod}</td>
+    </tr>
+  `).join('');
+
+  // Update stats
+  document.getElementById('totalOrders').textContent = orders.length;
+  const totalRevenue = orders.reduce((sum, order) => sum + order.totalAmount, 0);
+  document.getElementById('totalRevenue').textContent = totalRevenue;
+}
+
+function exportToExcel() {
+  if (!isAdminLoggedIn) {
+    alert('Please login first!');
+    return;
+  }
+
+  const orders = JSON.parse(localStorage.getItem('herbalHeavenOrders') || '[]');
+  
+  // Prepare data for Excel
+  const excelData = orders.map(order => ({
+    'Order ID': order.id,
+    'Date': order.date,
+    'Customer Name': order.customerName,
+    'Phone': order.customerPhone,
+    'Address': order.customerAddress,
+    'Items': order.items.map(item => `${item.name} x${item.quantity}`).join(', '),
+    'Total Amount': order.totalAmount,
+    'Payment Method': order.paymentMethod
+  }));
+
+  // Create worksheet
+  const ws = XLSX.utils.json_to_sheet(excelData);
+  
+  // Create workbook
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, 'Orders');
+  
+  // Generate Excel file
+  const fileName = `HerbalHeaven_Orders_${new Date().toISOString().split('T')[0]}.xlsx`;
+  XLSX.writeFile(wb, fileName);
 }
 </script>
 </body>
